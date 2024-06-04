@@ -50,7 +50,7 @@ public class TaptoplaceV2 : MonoBehaviour
             float angle = float.Parse(angleInput.text);
 
             // Assuming you have a method in your cylinder script to set direction and angle
-            currentObject.GetComponent<CylinderScript>().SetDirectionAndAngle(direction, angle);
+            //currentObject.GetComponent<CylinderScript>().SetDirectionAndAngle(direction, angle);
 
             directionPanel.SetActive(false); // Hide direction input panel after confirmation
             currentObject = null; // Reset reference to current object
