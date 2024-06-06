@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class TaptoplaceV2 : MonoBehaviour
+public class TaptoplaceV3 : MonoBehaviour
 {
     public GameObject objectPrefab; // The prefab to instantiate and place
     public Camera mainCamera; // The main camera
     public GameObject directionPanel; // Reference to the UI panel for direction input
-    public InputField directionInput; // Input field for direction
-    public InputField angleInput; // Input field for angle
+    public TMP_InputField directionInput; // Input field for direction
+    public TMP_InputField angleInput; // Input field for angle
 
     private bool isPlacing = false;
     private GameObject currentObject; // Reference to the object being placed
