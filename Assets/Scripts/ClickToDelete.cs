@@ -2,12 +2,28 @@ using UnityEngine;
 
 public class ClickToDelete : MonoBehaviour
 {
-    void OnMouseDown()
+    private DeleteMode deleteMode;
+
+    void Start()
     {
-        if (DeleteModeManager.Instance.isDeleteModeActive)
+        deleteMode = FindObjectOfType<DeleteMode>();
+    }
+
+    void Update()
+    {
+        if (deleteMode != null && deleteMode.IsDeleting() && Input.GetMouseButtonDown(0))
         {
-            // Destroy the game object this script is attached to
-            Destroy(gameObject);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                GameObject target = hit.collider.gameObject;
+
+                // Check if the hit object or any of its parents are the prefab containing the cylinder
+                if (target.CompareTag("SpawnedObject") || target.transform.root.CompareTag("SpawnedObject"))
+                {
+                    Destroy(target.transform.root.gameObject);
+                }
+            }
         }
     }
 }

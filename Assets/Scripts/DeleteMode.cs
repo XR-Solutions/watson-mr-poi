@@ -1,32 +1,21 @@
 using UnityEngine;
 
-public class DeleteModeManager : MonoBehaviour
+public class DeleteMode : MonoBehaviour
 {
-    public static DeleteModeManager Instance;
+    private bool isDeleting = false;
 
-    public bool isDeleteModeActive = false;
-
-    void Awake()
+    public void StartDeleting()
     {
-        // Ensure there's only one instance of the manager
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        isDeleting = true;
     }
 
-    public void StartDestroying()
+    public void StopDeleting()
     {
-        isDeleteModeActive = true;
+        isDeleting = false;
     }
 
-    public void StopDestroying()
+    public bool IsDeleting()
     {
-        isDeleteModeActive = false;
+        return isDeleting;
     }
 }
