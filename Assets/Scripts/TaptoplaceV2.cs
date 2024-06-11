@@ -1,17 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
-public class TaptoplaceV3 : MonoBehaviour
+public class TapToPlace3 : MonoBehaviour
 {
     public GameObject objectPrefab; // The prefab to instantiate and place
     public Camera mainCamera; // The main camera
-    public GameObject directionPanel; // Reference to the UI panel for direction input
-    public TMP_InputField directionInput; // Input field for direction
-    public TMP_InputField angleInput; // Input field for angle
 
     private bool isPlacing = false;
-    private GameObject currentObject; // Reference to the object being placed
 
     void Update()
     {
@@ -21,7 +15,7 @@ public class TaptoplaceV3 : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                PlaceObject(hit.point);
+                PlaceObject(hit.point, hit.normal);
             }
         }
     }
@@ -29,7 +23,6 @@ public class TaptoplaceV3 : MonoBehaviour
     public void StartPlacing()
     {
         isPlacing = true;
-        directionPanel.SetActive(false); // Hide direction input panel initially
     }
 
     public void StopPlacing()
@@ -37,24 +30,21 @@ public class TaptoplaceV3 : MonoBehaviour
         isPlacing = false;
     }
 
-    private void PlaceObject(Vector3 position)
+    private void PlaceObject(Vector3 position, Vector3 normal)
     {
-        currentObject = Instantiate(objectPrefab, position, Quaternion.identity);
-        directionPanel.SetActive(true); // Show direction input panel after object is spawned
-    }
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
+        GameObject newObject = Instantiate(objectPrefab, position, rotation);
 
-    public void ConfirmDirectionAndAngle()
-    {
-        if (currentObject != null)
+        Transform inputFieldsParent = newObject.transform.Find("InputFields");
+        if (inputFieldsParent != null)
         {
-            string direction = directionInput.text;
-            float angle = float.Parse(angleInput.text);
+            inputFieldsParent.gameObject.SetActive(true);
+        }
 
-            // Assuming you have a method in your cylinder script to set direction and angle
-            //currentObject.GetComponent<CylinderScript>().SetDirectionAndAngle(direction, angle);
-
-            directionPanel.SetActive(false); // Hide direction input panel after confirmation
-            currentObject = null; // Reset reference to current object
+        Transform confirmButton = newObject.transform.Find("Button");
+        if (confirmButton != null)
+        {
+            confirmButton.gameObject.SetActive(true);
         }
     }
 }
