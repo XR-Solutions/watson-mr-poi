@@ -5,7 +5,7 @@ using MixedReality.Toolkit.UX;
 
 public class CylinderInput : MonoBehaviour
 {
-    public MRTKTMPInputField rotationXInput; 
+    public MRTKUGUIInputField rotationXInput; 
     public MRTKUGUIInputField rotationYInput; 
     public Button confirmButton; 
 
