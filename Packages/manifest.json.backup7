@@ -20,7 +20,7 @@
     "org.mixedrealitytoolkit.core": "file:MixedReality/org.mixedrealitytoolkit.core-3.2.0.tgz",
     "org.mixedrealitytoolkit.diagnostics": "file:MixedReality/org.mixedrealitytoolkit.diagnostics-3.0.2.tgz",
     "org.mixedrealitytoolkit.extendedassets": "file:MixedReality/org.mixedrealitytoolkit.extendedassets-3.0.2.tgz",
-    "org.mixedrealitytoolkit.input": "file:MixedReality/org.mixedrealitytoolkit.input-3.2.1.tgz",
+    "org.mixedrealitytoolkit.input": "file:MixedReality/org.mixedrealitytoolkit.input-3.2.0.tgz",
     "org.mixedrealitytoolkit.spatialmanipulation": "file:MixedReality/org.mixedrealitytoolkit.spatialmanipulation-3.2.0.tgz",
     "org.mixedrealitytoolkit.standardassets": "file:MixedReality/org.mixedrealitytoolkit.standardassets-3.1.0.tgz",
     "org.mixedrealitytoolkit.tools": "file:MixedReality/org.mixedrealitytoolkit.tools-3.0.2.tgz",

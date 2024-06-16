@@ -335,7 +335,7 @@
       }
     },
     "org.mixedrealitytoolkit.input": {
-      "version": "file:MixedReality/org.mixedrealitytoolkit.input-3.2.0.tgz",
+      "version": "file:MixedReality/org.mixedrealitytoolkit.input-3.2.1.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {

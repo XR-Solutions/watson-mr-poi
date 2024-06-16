@@ -1,11 +1,12 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using MixedReality.Toolkit.UX;
 
 public class CylinderInput : MonoBehaviour
 {
-    public TMP_InputField rotationXInput; 
-    public TMP_InputField rotationYInput; 
+    public MRTKTMPInputField rotationXInput; 
+    public MRTKUGUIInputField rotationYInput; 
     public Button confirmButton; 
 
     void Start()
