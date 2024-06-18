@@ -1,9 +1,9 @@
-using UnityEngine;
+using Microsoft.MixedReality.Toolkit;
 using MixedReality.Toolkit.Input;
 using MixedReality.Toolkit.Subsystems;
-using Microsoft.MixedReality.Toolkit;
-using UnityEngine.InputSystem;
-using System.Collections.Generic;
+using MixedReality.Toolkit;
+using UnityEngine;
+using UnityEngine.XR;
 
 public class TapToPlaceTest : MonoBehaviour
 {
@@ -12,53 +12,80 @@ public class TapToPlaceTest : MonoBehaviour
     public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
 
     private bool isPlacing = false;
-    private HandsSubsystem handSubsystem;
+    private IHandsAggregatorSubsystem handsAggregatorSubsystem;
 
-    private void OnEnable()
+    void Start()
     {
-        var handSubsystems = new List<HandsSubsystem>();
-        SubsystemManager.GetSubsystems(handSubsystems);
-        if (handSubsystems.Count > 0)
+        handsAggregatorSubsystem = XRSubsystemHelpers.GetFirstRunningSubsystem<IHandsAggregatorSubsystem>();
+        if (handsAggregatorSubsystem == null)
         {
-            handSubsystem = handSubsystems[0];
+            Debug.LogError("Hands Aggregator Subsystem not found or not running.");
         }
-
-        InputAction pinchAction = new InputAction("Pinch", binding: "<XRController>{LeftHand}/select");
-        pinchAction.performed += OnPinchPerformed;
-        pinchAction.canceled += OnPinchCanceled;
-        pinchAction.Enable();
-    }
-
-    private void OnDisable()
-    {
-        // Clean up the input action bindings
-        InputAction pinchAction = new InputAction("Pinch");
-        pinchAction.performed -= OnPinchPerformed;
-        pinchAction.canceled -= OnPinchCanceled;
-        pinchAction.Disable();
-    }
-
-    private void OnPinchPerformed(InputAction.CallbackContext context)
-    {
-        isPlacing = true;
-    }
-
-    private void OnPinchCanceled(InputAction.CallbackContext context)
-    {
-        isPlacing = false;
     }
 
     void Update()
     {
-        if (isPlacing)
+        bool isPinchingLeft = false;
+        bool isPinchReleasedLeft = false;
+        float pinchAmountLeft = 0.0f;
+
+        bool isPinchingRight = false;
+        bool isPinchReleasedRight = false;
+        float pinchAmountRight = 0.0f;
+
+        if (handsAggregatorSubsystem != null)
         {
-            // Cast a ray from the center of the camera view (adjust as needed for your application)
-            Ray ray = mainCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (TryGetPinchProgress(Handedness.Left, out isPinchingLeft, out isPinchReleasedLeft, out pinchAmountLeft) ||
+                TryGetPinchProgress(Handedness.Right, out isPinchingRight, out isPinchReleasedRight, out pinchAmountRight))
             {
-                PlaceObject(hit.point, hit.normal);
+                bool isPinching = isPinchingLeft || isPinchingRight;
+                float pinchAmount = Mathf.Max(pinchAmountLeft, pinchAmountRight);
+
+                if (pinchAmount == 1 && isPlacing)
+                {
+                    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(ray, out RaycastHit hit))
+                    {
+                        PlaceObject(hit.point, hit.normal);
+                    }
+                }
             }
         }
+    }
+
+    private bool TryGetPinchProgress(Handedness handedness, out bool isPinching, out bool isPinchReleased, out float pinchAmount)
+    {
+        isPinching = false;
+        isPinchReleased = false;
+        pinchAmount = 0.0f;
+
+        if (handsAggregatorSubsystem != null)
+        {
+            if (handsAggregatorSubsystem.TryGetPinchProgress((XRNode)handedness, out bool pinchInProgress, out bool pinchReady, out float pinchStrength))
+            {
+                if (pinchInProgress)
+                {
+                    isPinching = true;
+                    pinchAmount = 1.0f;
+                    return true;
+                }
+                else if (pinchReady && pinchStrength == 0.0f)
+                {
+                    isPinchReleased = true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void StartPlacing()
+    {
+        isPlacing = true;
+    }
+
+    public void StopPlacing()
+    {
+        isPlacing = false;
     }
 
     private void PlaceObject(Vector3 position, Vector3 normal)

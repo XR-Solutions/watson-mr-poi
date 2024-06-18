@@ -7,11 +7,11 @@ public class CylinderInput : MonoBehaviour
 {
     public MRTKUGUIInputField rotationXInput; 
     public MRTKUGUIInputField rotationYInput; 
-    public Button confirmButton; 
+ 
 
     void Start()
     {
-        confirmButton.onClick.AddListener(ApplyRotation);
+        
     }
 
     public void ApplyRotation()
