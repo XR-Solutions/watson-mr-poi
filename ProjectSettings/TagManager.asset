@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - 'SpawnedObject '
+  - InputFieldXTag
+  - InputFieldYTag
   - SpawnedObject
   layers:
   - Default

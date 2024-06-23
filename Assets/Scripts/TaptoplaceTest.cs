@@ -1,7 +1,7 @@
 using Microsoft.MixedReality.Toolkit;
+using MixedReality.Toolkit;
 using MixedReality.Toolkit.Input;
 using MixedReality.Toolkit.Subsystems;
-using MixedReality.Toolkit;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -9,7 +9,7 @@ public class TapToPlaceTest : MonoBehaviour
 {
     public GameObject objectPrefab; // The prefab to instantiate and place
     public Camera mainCamera; // The main camera
-    public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
+    public float placementOffset = 1f; // Offset distance to place the object away from the surface
 
     private bool isPlacing = false;
     private IHandsAggregatorSubsystem handsAggregatorSubsystem;
@@ -25,6 +25,12 @@ public class TapToPlaceTest : MonoBehaviour
 
     void Update()
     {
+        if (handsAggregatorSubsystem == null)
+        {
+            Debug.LogError("Hands Aggregator Subsystem is null in Update. Make sure it is properly initialized.");
+            return;
+        }
+
         bool isPinchingLeft = false;
         bool isPinchReleasedLeft = false;
         float pinchAmountLeft = 0.0f;
@@ -33,7 +39,7 @@ public class TapToPlaceTest : MonoBehaviour
         bool isPinchReleasedRight = false;
         float pinchAmountRight = 0.0f;
 
-        if (handsAggregatorSubsystem != null)
+        try
         {
             if (TryGetPinchProgress(Handedness.Left, out isPinchingLeft, out isPinchReleasedLeft, out pinchAmountLeft) ||
                 TryGetPinchProgress(Handedness.Right, out isPinchingRight, out isPinchReleasedRight, out pinchAmountRight))
@@ -48,8 +54,20 @@ public class TapToPlaceTest : MonoBehaviour
                     {
                         PlaceObject(hit.point, hit.normal);
                     }
+                    else
+                    {
+                        Debug.LogError("Raycast did not hit any surface.");
+                    }
                 }
             }
+            else
+            {
+                Debug.LogError("Failed to get pinch progress.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Exception in Update: {ex.Message}\n{ex.StackTrace}");
         }
     }
 
@@ -59,7 +77,13 @@ public class TapToPlaceTest : MonoBehaviour
         isPinchReleased = false;
         pinchAmount = 0.0f;
 
-        if (handsAggregatorSubsystem != null)
+        if (handsAggregatorSubsystem == null)
+        {
+            Debug.LogError("Hands Aggregator Subsystem is null in TryGetPinchProgress. Make sure it is properly initialized.");
+            return false;
+        }
+
+        try
         {
             if (handsAggregatorSubsystem.TryGetPinchProgress((XRNode)handedness, out bool pinchInProgress, out bool pinchReady, out float pinchStrength))
             {
@@ -73,7 +97,19 @@ public class TapToPlaceTest : MonoBehaviour
                 {
                     isPinchReleased = true;
                 }
+                else
+                {
+                    Debug.LogError("Pinch progress retrieval failed or pinch not in progress.");
+                }
             }
+            else
+            {
+                Debug.LogError($"Failed to retrieve pinch progress for {handedness} hand.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Exception in TryGetPinchProgress for {handedness} hand: {ex.Message}\n{ex.StackTrace}");
         }
         return false;
     }

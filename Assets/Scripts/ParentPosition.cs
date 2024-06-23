@@ -13,7 +13,11 @@ public class ParentPosition : MonoBehaviour
 	private void Awake()
 	{
 		this.ChildTransform = this.GetComponent<Transform>();
-	}
+        if (this.ParentTransform == null)
+        {
+            this.ParentTransform = Camera.main.transform;
+        }
+    }
 
 	public void MoveToParent()
 	{
