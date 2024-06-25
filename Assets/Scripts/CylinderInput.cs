@@ -63,4 +63,5 @@ public class CylinderInput : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
     }
+
 }
