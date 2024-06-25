@@ -1,5 +1,5 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MixedReality.Toolkit.UX.Experimental
 {
@@ -7,18 +7,15 @@ namespace MixedReality.Toolkit.UX.Experimental
     {
         private string currentValue;
 
-        // Add reference to the active input field
-        private TMP_InputField targetInputField;
-
         public string CurrentValue
         {
             get => currentValue;
             private set
             {
                 currentValue = value;
-                if (textMeshProText != null)
+                if (textComponent != null)
                 {
-                    textMeshProText.text = currentValue;
+                    textComponent.text = currentValue;
                 }
             }
         }
@@ -42,14 +39,16 @@ namespace MixedReality.Toolkit.UX.Experimental
         }
 
         [SerializeField, Tooltip("Reference to child text element.")]
-        private TMP_Text textMeshProText;
+        private Text textComponent;
+
+        private Text inputFieldTextComponent;
 
         protected override void Awake()
         {
             base.Awake();
-            if (textMeshProText == null)
+            if (textComponent == null)
             {
-                textMeshProText = GetComponentInChildren<TMP_Text>();
+                textComponent = GetComponentInChildren<Text>();
             }
 
             CurrentValue = defaultValue;
@@ -67,19 +66,19 @@ namespace MixedReality.Toolkit.UX.Experimental
 
         private void OnValidate()
         {
-            if (textMeshProText == null)
+            if (textComponent == null)
             {
-                textMeshProText = GetComponentInChildren<TMP_Text>();
+                textComponent = GetComponentInChildren<Text>();
             }
-            if (textMeshProText != null)
+            if (textComponent != null)
             {
-                textMeshProText.text = defaultValue;
+                textComponent.text = defaultValue;
             }
         }
 
         protected override void FireKey()
         {
-            NonNativeKeyboard.Instance.ProcessValueKeyPress(this);
+            InsertValueIntoInputField();
         }
 
         private void Shift(bool isShifted)
@@ -94,19 +93,22 @@ namespace MixedReality.Toolkit.UX.Experimental
             }
         }
 
-        // Method to set the target input field
-        public void SetTargetInputField(TMP_InputField inputField)
+        private void InsertValueIntoInputField()
         {
-            targetInputField = inputField;
+            if (inputFieldTextComponent != null)
+            {
+                inputFieldTextComponent.text += CurrentValue;
+            }
         }
 
-        // Method to insert the key value into the active input field
-        public void InsertValueIntoInputField()
+        public void SetTargetInputField(Text target)
         {
-            if (targetInputField != null)
-            {
-                targetInputField.text += CurrentValue;
-            }
+            inputFieldTextComponent = target;
+        }
+
+        public void PressKey()
+        {
+            FireKey();
         }
     }
 }
