@@ -13,37 +13,9 @@ public class SandD : MonoBehaviour
     public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
     private GameObject Spawned;
 
-    private bool isSpawning = false;
-    private bool isReplacing = false;
-
     void Update()
     {
-        if (Spawned != null && isReplacing)
-        {
-            GameObject[] activeDots = GameObject.FindGameObjectsWithTag("SpawnedObject");
-            if (activeDots.Length > 0)
-            {
-                GameObject dot = activeDots[0];
-                Vector3 dotPosition = dot.transform.position;
-                Quaternion dotRotation = dot.transform.rotation;
-
-                // Instantiate the cylinder and destroy the dot
-                GameObject newCylinder = Instantiate(Cylinder, dotPosition, dotRotation);
-                Destroy(dot);
-                isReplacing = false;
-
-                // Call ApplyRotation on the CylinderInput component of the new cylinder
-                CylinderInput cylinderInput = newCylinder.GetComponent<CylinderInput>();
-                if (cylinderInput != null)
-                {
-                    cylinderInput.ApplyRotation();
-                }
-                else
-                {
-                    Debug.LogError("CylinderInput component not found on the new cylinder.");
-                }
-            }
-        }
+        
     }
 
     public void SpawnObject()
@@ -63,7 +35,6 @@ public class SandD : MonoBehaviour
             return;
         }
 
-        isSpawning = true;
         Spawned = Instantiate(Dot);
         Spawned.tag = "SpawnedObject";
 
@@ -76,6 +47,30 @@ public class SandD : MonoBehaviour
 
     public void Replace()
     {
-        isReplacing = true;
+        if (Spawned != null)
+        {
+            GameObject[] activeDots = GameObject.FindGameObjectsWithTag("SpawnedObject");
+            if (activeDots.Length > 0)
+            {
+                GameObject dot = activeDots[0];
+                Vector3 dotPosition = dot.transform.position;
+                Quaternion dotRotation = dot.transform.rotation;
+
+                // Instantiate the cylinder and destroy the dot
+                GameObject newCylinder = Instantiate(Cylinder, dotPosition, dotRotation);
+                Destroy(dot);
+
+                // Call ApplyRotation on the CylinderInput component of the new cylinder
+                CylinderInput cylinderInput = newCylinder.GetComponent<CylinderInput>();
+                if (cylinderInput != null)
+                {
+                    cylinderInput.ApplyRotation();
+                }
+                else
+                {
+                    Debug.LogError("CylinderInput component not found on the new cylinder.");
+                }
+            }
+        }
     }
 }
