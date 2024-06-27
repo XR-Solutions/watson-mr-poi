@@ -12,6 +12,7 @@ public class SandD : MonoBehaviour
     public Camera mainCamera; // The main camera
     public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
     private GameObject Spawned;
+    public ObjectManager objectManager;
 
     void Update()
     {
@@ -23,7 +24,7 @@ public class SandD : MonoBehaviour
         GameObject[] activeDots = GameObject.FindGameObjectsWithTag("SpawnedObject");
         if (activeDots.Length > 0)
         {
-            Debug.LogError("Can't have more than one active dot");
+            Debug.LogWarning("Can't have more than one active dot");
 
             // Move the existing dot in front of the parent
             GameObject existingDot = activeDots[0];
@@ -65,6 +66,7 @@ public class SandD : MonoBehaviour
                 if (cylinderInput != null)
                 {
                     cylinderInput.ApplyRotation();
+                    objectManager.RegisterCreatedObject(newCylinder);
                 }
                 else
                 {
