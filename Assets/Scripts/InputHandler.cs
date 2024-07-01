@@ -45,6 +45,7 @@ public class InputHandler : MonoBehaviour
     {
         X = true;
         Y = false;
+        ClearInput();
         UpdateOutput();
     }
 
@@ -52,7 +53,13 @@ public class InputHandler : MonoBehaviour
     {
         X = false;
         Y = true;
+        ClearInput();
         UpdateOutput();
+    }
+
+    public void ClearInput()
+    {
+        Textoutput.text = "";
     }
 
     private void UpdateOutput()
