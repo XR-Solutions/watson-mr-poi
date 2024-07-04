@@ -40,11 +40,9 @@ public class ParentPosition : MonoBehaviour
 			return;
 		}
 
-		// Get the camera's position and rotation
 		Vector3 cameraPosition = Camera.main.transform.position;
 		Quaternion cameraRotation = Camera.main.transform.rotation;
 
-		// Calculate the spawn position based on camera rotation
 		Vector3 spawnPosition = cameraPosition + cameraRotation * Vector3.forward * CustomDistance;
 
 		ChildTransform.position = spawnPosition;

@@ -10,7 +10,6 @@ public class CylinderInput : MonoBehaviour
 
     void Start()
     {
-        // Automatically assign the input fields if they are not set in the inspector
         if (rotationXInput == null)
         {
             GameObject XText2 = GameObject.FindWithTag("InputFieldXTag");
@@ -52,7 +51,6 @@ public class CylinderInput : MonoBehaviour
         float rotationX = 0;
         float rotationY = 0;
 
-        // Example: Allow input using keyboard
         if (rotationXInput != null)
         {
             float.TryParse(rotationXInput.text, out rotationX);
@@ -62,7 +60,6 @@ public class CylinderInput : MonoBehaviour
             Debug.LogError("RotationXInput TMP_Text is null.");
         }
 
-        // Example: Allow input using keyboard
         if (rotationYInput != null)
         {
             float.TryParse(rotationYInput.text, out rotationY);

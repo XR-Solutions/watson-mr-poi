@@ -7,10 +7,10 @@ using UnityEditor.SceneManagement;
 
 public class SandD : MonoBehaviour
 {
-    public GameObject Dot; // The prefab to instantiate and place
-    public GameObject Cylinder; // The prefab for the cylinder to instantiate
-    public Camera mainCamera; // The main camera
-    public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
+    public GameObject Dot;
+    public GameObject Cylinder;
+    public Camera mainCamera;
+    public float placementOffset = 0.1f;
     private GameObject Spawned;
     public ObjectManager objectManager;
 
@@ -26,7 +26,6 @@ public class SandD : MonoBehaviour
         {
             Debug.LogWarning("Can't have more than one active dot");
 
-            // Move the existing dot in front of the parent
             GameObject existingDot = activeDots[0];
             ParentPosition parentPosition = existingDot.GetComponent<ParentPosition>();
             if (parentPosition != null)
@@ -57,11 +56,9 @@ public class SandD : MonoBehaviour
                 Vector3 dotPosition = dot.transform.position;
                 Quaternion dotRotation = dot.transform.rotation;
 
-                // Instantiate the cylinder and destroy the dot
                 GameObject newCylinder = Instantiate(Cylinder, dotPosition, dotRotation);
                 Destroy(dot);
 
-                // Call ApplyRotation on the CylinderInput component of the new cylinder
                 CylinderInput cylinderInput = newCylinder.GetComponent<CylinderInput>();
                 if (cylinderInput != null)
                 {

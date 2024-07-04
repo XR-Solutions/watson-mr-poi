@@ -22,7 +22,7 @@ public class InputHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Update logic if needed
+        
     }
 
     public void Enter()
@@ -37,7 +37,6 @@ public class InputHandler : MonoBehaviour
             YTextinput.text = Textoutput.text;
         }
 
-        // Ensure Textoutput is updated to reflect the current active input
         UpdateOutput();
     }
 

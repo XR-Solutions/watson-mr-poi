@@ -7,9 +7,9 @@ using MixedReality.Toolkit;
 
 public class TapToPlace : MonoBehaviour
 {
-    public GameObject objectPrefab; // The prefab to instantiate and place
-    public Camera mainCamera; // The main camera
-    public float placementOffset = 0.1f; // Offset distance to place the object away from the surface
+    public GameObject objectPrefab;
+    public Camera mainCamera; 
+    public float placementOffset = 0.1f; 
 
     private bool isPlacing = false;
 
@@ -38,15 +38,12 @@ public class TapToPlace : MonoBehaviour
 
     private void PlaceObject(Vector3 position, Vector3 normal)
     {
-        // Calculate the rotation to align the object with the normal vector
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
-        // Offset the position to place the object slightly away from the surface
         Vector3 offsetPosition = position + normal * placementOffset;
 
         GameObject newObject = Instantiate(objectPrefab, offsetPosition, rotation);
 
-        // Tag the new object for deletion
         newObject.tag = "SpawnedObject";
     }
 }
